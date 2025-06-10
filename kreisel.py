@@ -61,6 +61,7 @@ def kreisel(z, dt):
 
     c4 = 0.04
     c5 = 0.2
+    #c5 = 0
     #c4 = 0
     '''
     fz += -c4 * dlz * c5 * (rotZ[1]**2 + rotZ[2]**2)
@@ -162,3 +163,8 @@ pl.figure(10)
 pl.plot(t2[0:100], toDirection(z2[0:100], np.array([1, 0, 0])))
 pl.legend()
 pl.savefig('zAnfang.png')
+
+pl.figure(11)
+pl.plot(t2[0:100], toDirection(z2[0:100], np.array([0, 0, 1])))
+pl.legend()
+pl.savefig('xAnfang.png')
