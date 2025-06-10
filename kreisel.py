@@ -157,3 +157,8 @@ pl.figure(9)
 pl.plot(t2[30000:40000], toDirection(z2[30000:40000], np.array([0, 0, 1])))
 pl.legend()
 pl.savefig('x4.png')
+
+pl.figure(10)
+pl.plot(t2[0:100], toDirection(z2[0:100], np.array([1, 0, 0])))
+pl.legend()
+pl.savefig('zAnfang.png')
