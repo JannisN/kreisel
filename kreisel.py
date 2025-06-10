@@ -125,7 +125,7 @@ def func(z,t):
 def kreisel(z, dt):
     c1 = 1
     #c1 = 0
-    c3 = 0.05
+    c3 = 0.01
     #c3 = 0
     lz, ly, lx, dlz, dly, dlx = z
     '''
@@ -146,13 +146,23 @@ def kreisel(z, dt):
     nz, ny, nx = logRot2(rot)
     #print('problem ', nx)
     rotOld = expRot2(lz, ly, lx)
-    fz = 0 - c3 * np.sign(dlz)
-    fz = 0 - c3 * (dlz)
+    fz = 0 - c3 * np.sign(dlz) * 10
+    #fz = 0 - c3 * (dlz)
     rotZ = np.matmul(rot, np.array([1, 0, 0]))
     # warum geht das nicht?
     #fz = 0 - c3 * ((nz - lz) / dt)
     fy = c1 * rotZ[2]
     fx = c1 * -rotZ[1]
+    c4 = 0.1
+    c5 = 0.2
+    '''
+    fz += -c4 * dlz * c5 * (rotZ[1]**2 + rotZ[2]**2)
+    fy += -c4 * dlz * rotZ[1]
+    fx += -c4 * dlz * rotZ[2]
+    '''
+    fz += -c4 * 10 * np.sign(dlz) * c5 * (rotZ[1]**2 + rotZ[2]**2)
+    fy += -c4 * 10 * np.sign(dlz) * rotZ[1]
+    fx += -c4 * 10 * np.sign(dlz) * rotZ[2]
     '''
     # zum testen ob stabilität ein problem ist
     fz = 0
@@ -184,13 +194,13 @@ def solve(res, dt, z0, func):
 
 
 z0=[1,2]
-i0 = [0, np.pi / 2, 0, 4, 0, 0]
+i0 = [0, np.pi / 2, 0, 16, 0, 0]
 #i0 = [0, 0.5, 0, 4, 0, 0]
 
 t = np.linspace(0,1,501)
 xx=odeint(kreisel, i0, t)
 
-t2, z2 = solve(2000, 0.01, i0, kreisel)
+t2, z2 = solve(10000, 0.006, i0, kreisel)
 
 '''
 print(xx)
@@ -298,4 +308,10 @@ pl.plot(t2, toDirection(z2, np.array([1, 0, 0])))
 #pl.plot(t, xx[:,0], t, xx[:,1], t, xx[:,2])
 #pl.plot(t, xx[:,0] % np.pi, t, xx[:,1], t, xx[:,2])
 pl.legend()
-pl.show()
+pl.savefig('10000.png')
+#pl.show()
+
+pl.figure(2)
+pl.plot(t2[0:1000], toDirection(z2[0:1000], np.array([1, 0, 0])))
+pl.legend()
+pl.savefig('1000.png')
